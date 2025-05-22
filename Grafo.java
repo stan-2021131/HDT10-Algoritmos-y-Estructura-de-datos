@@ -94,7 +94,7 @@ public class Grafo{
         return vertices;
     }
 
-    public static int getMax() {
+    public int getMax() {
         return MAX;
     }
 

@@ -1,4 +1,10 @@
 public class FloydWarshall {
+
+    /**
+     * Calculo de las rutas más cortas mediante el algoritmo de floyd warshall
+     * @param grafo
+     * @return Matriz de distancias 
+     */
     public int[][] floydWarshall(Grafo grafo){
         int[][] distanciasFin = new int[grafo.getVertices().length][grafo.getVertices().length];
         for(int i = 0; i<grafo.getVertices().length; i++){
@@ -7,7 +13,7 @@ public class FloydWarshall {
         for (int k = 0; k < grafo.getVertices().length; k++) {       // Nodo intermedio
             for (int i = 0; i < grafo.getVertices().length; i++) {   // Nodo origen
                 for (int j = 0; j < grafo.getVertices().length; j++) { // Nodo destino
-                    if (distanciasFin[i][k] + distanciasFin[k][j] < distanciasFin[i][j]) 
+                    if (distanciasFin[i][k] + distanciasFin[k][j] < distanciasFin[i][j]) //Compara si la distancia nueva es menor a la ya registrada
                         distanciasFin[i][j] = distanciasFin[i][k] + distanciasFin[k][j];
                 }
             }
@@ -15,34 +21,44 @@ public class FloydWarshall {
         return distanciasFin;
     }
 
-
+    /**
+     * Encuentra el vertice con la ruta más corta entre las rutas más largas
+     * @param distancias
+     * @param grafo
+     * @return Vertice centro del grafo
+     */
     public String calcularCentroGrafo(int[][] distancias, Grafo grafo) {
-    int[] maximos = new int[grafo.getVertices().length];
-    int centro = 0;
-    
-    // Encontrar la máxima distancia para cada vértice
-    for (int i = 0; i < grafo.getVertices().length; i++) {
-        int max = 0;
-        for (int j = 0; j < grafo.getVertices().length; j++) {
-            if (distancias[i][j] > max && i != j) {
-                max = distancias[i][j];
+        int[] maximos = new int[grafo.getVertices().length];
+        int centro = 0;
+        
+        // Encontrar la máxima distancia para cada vértice
+        for (int i = 0; i < grafo.getVertices().length; i++) {
+            int max = 0;
+            for (int j = 0; j < grafo.getVertices().length; j++) {
+                if (distancias[i][j] > max && i != j) {
+                    max = distancias[i][j]; // Actualizar el máximo
+                }
+            }
+            maximos[i] = max; // Guardar el máximo para cada vértice
+        }
+        
+        // Encontrar el vértice con el mínimo de los máximos
+        int minMax = Integer.MAX_VALUE;
+        for (int i = 0; i < maximos.length; i++) {
+            if (maximos[i] < minMax) {
+                minMax = maximos[i]; // Actualizar el mínimo
+                centro = i; // Actualizar el centro
             }
         }
-        maximos[i] = max;
-    }
-    
-    // Encontrar el vértice con el mínimo de los máximos
-    int minMax = Integer.MAX_VALUE;
-    for (int i = 0; i < maximos.length; i++) {
-        if (maximos[i] < minMax) {
-            minMax = maximos[i];
-            centro = i;
-        }
-    }
-    
-    return grafo.getVertices()[centro];
+        
+        return grafo.getVertices()[centro]; // Devolver el vértice con el mínimo de los máximos
     }
 
+    /**
+     * Imprime de manera más legible la matriz de adyacencia
+     * @param matriz
+     * @param grafo
+     */
     public void imprimirMatrizDistancias(int[][] matriz, Grafo grafo) {
         System.out.print("    ");
         for (String vertice : grafo.getVertices()) {
